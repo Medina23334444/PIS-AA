@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+.color-detalle i {
+    margin-right: 10px;
+
+}
+
+.alert-warning {
+    background-color: #eaeef3 ;
+    border: none;
+    color: black;
+    margin-left: 32px;
+}
+
+.section{
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    size: 20cap;
+}
+
+.section.tabla {
+    width: 96%;
+    height: 350px;
+    border: none;
+    position: relative;
+    left: 40px;
+    background-color: rgb(255, 255, 255);
+}
+
+.tall-alert {
+    height: 45px;
+}
+
+.modal-dialog {
+    max-width: 50%;
+    width: auto;
+
+}
+
+.breadcrumb {
+    background-color: #eaeef3;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+

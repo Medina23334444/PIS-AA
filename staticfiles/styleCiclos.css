@@ -1,0 +1,86 @@
+.chart-container2 {
+    margin-top: 10px;
+    margin-left: 200px;
+}
+
+.row.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 10px; /* Espacio entre los contenedores */
+    padding: 15px; /* Espacio interno dentro de los contenedores */
+    border: 1px solid #ddd; /* Añade un borde para visualización */
+    border-radius: 5px; /* Esquinas redondeadas para un diseño más suave */
+    background-color: #f9f9f9; /* Color de fondo para los contenedores */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.chart {
+    width: 100%; /* Asegúrate de que el gráfico ocupa todo el contenedor */
+    height: 400px; /* Ajusta la altura según tus necesidades */
+}
+
+.container {
+    padding: 0 15px; /* Espacio alrededor del contenedor principal */
+}
+
+@media (min-width: 576px) {
+    .chart-container {
+        margin: 15px; /* Mayor margen en pantallas más grandes */
+    }
+}
+
+.btn-primary {
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    border-color: #000000
+}
+
+.contenedor {
+    margin-bottom: 20px;
+}
+
+.custom-select-container {
+    margin-bottom: 10px;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+.custom-icon {
+    margin-left: 10px;
+    width: 15%;
+}
+
+@media (min-width: 768px) {
+    .custom-select-container,
+    .button-container {
+        margin-bottom: 10px;
+    }
+}
+
+
+.breadcrumb {
+    background-color: #eaeef3;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}

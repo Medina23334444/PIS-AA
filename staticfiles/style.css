@@ -1,0 +1,87 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+:root {
+    --color-barra-lateral: #eaeef3;
+    --color-texto: rgb(0, 0, 0);
+    --color-texto-menu: rgb(134, 136, 144);
+    --color-menu-hover: rgb(255, 255, 255);
+    --color-menu-hover-texto: rgb(0, 0, 0);
+    --color-boton: rgb(0, 0, 0);
+    --color-boton-texto: rgb(255, 255, 255);
+    --color-linea: rgb(207, 28, 28);
+}
+* {
+    font-family: "Outfit", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.body-1 {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.navbar-brand img {
+    width: 150px;
+    height: 44px;
+}
+
+.header {
+    background: url("unl.png");
+    background-size: cover;
+    color: white;
+    padding: 180px 0;
+    text-align: center;
+}
+
+
+.header .container {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+
+.header p {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.header .btn {
+    padding: 10px 30px;
+    font-size: 1.25rem;
+}
+
+.header .btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.header1 {
+    background: url("unl.png");
+    background-size: cover;
+    color: white;
+    padding: 180px 0;
+    text-align: center;
+}
+
+.translucent-card {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
+
+

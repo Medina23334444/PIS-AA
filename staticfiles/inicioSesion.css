@@ -1,0 +1,35 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+* {
+    font-family: "Outfit", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.form-control1 {
+    color: #050404;
+    border: none;
+    background-color: #eaeef3;
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+.img-1{
+    background-image: url("slide-ectricidad-3.jpg");
+    background-size:cover;
+     background-position: center;
+}
+
+.img-2{
+    background-image: url("aaa.png");
+    background-size:cover;
+     background-position: center;
+}
+
+.img-3{
+    background-image: url("unl.png");
+    background-size:cover;
+     background-position: center;
+}
+

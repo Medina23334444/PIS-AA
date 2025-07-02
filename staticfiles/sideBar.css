@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+:root {
+    --color-barra-lateral: #eaeef3;
+    --color-texto: rgb(0, 0, 0);
+    --color-texto-menu: rgb(134, 136, 144);
+    --color-menu-hover: rgb(255, 255, 255);
+    --color-menu-hover-texto: rgb(0, 0, 0);
+    --color-boton: #eaeef3;
+    --color-boton-texto: rgb(255, 255, 255);
+    --color-linea: rgb(180, 180, 180);
+}
+
+* {
+    font-family: "Outfit", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.body-1 {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+
+.barra-lateral {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    height: 100%;
+    padding: 20px 15px;
+    background-color: var(--color-barra-lateral);
+    transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow: auto;
+}
+
+.barra-lateral .nombre-pagina {
+    width: 100%;
+    height: 45px;
+    color: var(--color-texto);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.barra-lateral .nombre-pagina ion-icon {
+    min-width: 50px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.mini-barra-lateral {
+    width: 80px;
+}
+
+.barra-lateral span.oculto {
+    opacity: 0;
+    width: 0;
+}
+
+.barra-lateral span {
+    width: 100px;
+    white-space: nowrap;
+    font-size: 18px;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.5s ease, width 0.5s ease;
+
+}
+
+.barra-lateral .nombre-pagina span {
+    margin-left: 5px;
+    font-size: 25px;
+}
+
+.barra-lateral .nombre-carrera span {
+    margin-left: 5px;
+    font-size: 15px;
+    transition: font-size 0.5s ease, opacity 0.5s ease;
+}
+
+
+.barra-lateral .usuario {
+    width: 100%;
+    display: flex;
+}
+
+.barra-lateral .usuario img {
+    width: 50px;
+    min-width: 50px;
+    border-radius: 10px;
+}
+
+.barra-lateral .boton {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+}
+
+.barra-lateral .boton ion-icon {
+    min-width: 50px;
+    font-size: 18px;
+}
+
+.barra-lateral .navegacion {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.barra-lateral .navegacion::-webkit-scrollbar {
+    width: 5px;
+}
+
+.barra-lateral .navegacion::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 5px;
+}
+
+.barra-lateral .navegacion li {
+    list-style: none;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.barra-lateral .navegacion a {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    border-radius: 10px;
+    background-color: var(--color-barra-lateral);
+    color: var(--color-texto-menu);
+}
+
+.barra-lateral .navegacion ion-icon {
+    min-width: 50px;
+    font-size: 20px;
+}
+
+.barra-lateral .navegacion ul {
+    padding-left: 0;
+}
+
+
+.barra-lateral .navegacion a:hover {
+    background-color: var(--color-menu-hover);
+    color: var(--color-menu-hover-texto);
+}
+
+.barra-lateral .linea {
+    width: 100%;
+    height: 1px;
+    margin-top: 15px;
+    background-color: var(--color-linea);
+}
+
+.menu {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    right: 15px;
+    top: 15px;
+}
+
+@media (max-height: 600px) {
+    .barra-lateral .nombre-pagina {
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-height: 600px) {
+    .barra-lateral {
+        position: relative;
+        left: -250px;
+    }
+
+    .max-barra-lateral {
+        left: 0;
+    }
+
+    .menu {
+        display: flex;
+    }
+}
+
+.form-control1 {
+    color: #050404;
+    border: none;
+    background-color: #eaeef3;
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+.section {
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    size: 20cap;
+}
+
+.section.tabla {
+    width: 96%;
+    height: 350px;
+    border: none;
+    position: relative;
+    left: 40px;
+    background-color: rgb(255, 255, 255);
+}
+
+.barra-lateral .usuario .info-usuario {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    margin-left: 10px;
+}
+
+.barra-lateral .usuario .nombre {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.barra-lateral .usuario .email {
+    font-size: 13px;
+}
+
+.barra-lateral .usuario .icon-icon {
+    font-size: 20px;
+}
+
+
+

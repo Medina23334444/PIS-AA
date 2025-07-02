@@ -1,0 +1,30 @@
+.color-detalle i {
+    margin-right: 10px;
+         
+}
+
+.alert-warning {
+    background-color: #eaeef3;
+    border: black;
+    border-color: black;
+    color: black;
+}
+
+.section{
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    size: 20cap;
+}
+
+.section.tabla {
+    width: 92%;
+    height: 350px;    
+    border: #000000;
+    position: relative; 
+    left: 40px;
+    border-color: rgb(73, 9, 177);
+    background-color: rgb(0, 0, 0);
+}
+

@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+.color-detalle i {
+    margin-right: 10px;
+
+}
+
+.alert-warning {
+    background-color: #eaeef3 ;
+    border: none;
+    color: black;
+    margin-left: 32px;
+}
+
+.section{
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    size: 22cap;
+}
+
+.section.tabla {
+    width: 100%;
+    height: 100%;
+    /*height: 96%;*/
+    border: none;
+    position: relative;
+    left: 40px;
+    background-color: rgb(255, 255, 255);
+}
+
+.tall-alert {
+    height: 45px;
+}
+
+.modal-dialog {
+    max-width: 50%;
+    width: auto;
+
+}
+
+.breadcrumb {
+    background-color: #eaeef3;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.containerPdf{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  border: 2px solid black;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 80vh; 
+}
+
+.containerDocPDF { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  position: relative;
+  background-color: white;
+  text-align: center;
+}
+
+#docPDF {
+  width: 100%;
+  height: 100%;
+  /*margin-top: -500px;/*Mejorarle aquí*/
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative; 
+}
+
+@media print {
+  .containerDocPDF {
+    transform: none; /* Desactiva la transformación durante la impresión */
+    margin: 0;
+  }
+
+  #docPDF {
+    width: 100%;
+    height: 100%;
+    margin-top: 0;
+  }
+}
+
+.datosHistoricos {
+  margin-top: 5px;
+  width: 800px;
+}
+
+.logoInf {
+  max-width: 300px;
+}
+
+.facultyNameInf {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.careerNameInf {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.align-right {
+  display: flex; /* Usamos flexbox para la alineación */
+  justify-content: flex-end; /* Alinea los elementos al final (derecha) */
+  align-items: center; /* Centra verticalmente los elementos */
+  margin-bottom: 15px; /* Añade un margen inferior para separación */
+}
+
+.align-right .btn {
+  margin-right: 10px; /* Espacio entre el botón y el icono */
+}
+
+.custom-icon {
+  font-size: 1.5rem; /* Ajusta el tamaño del icono si es necesario */
+  transition: color 0.2s ease-in-out; /* Añade una transición de color para el efecto hover */
+}
+
+.custom-icon:hover {
+  color: #ff6600; /* Cambia de color al pasar el cursor */
+}
+
+.table {
+  border-collapse: collapse; /* Asegura que los bordes de la tabla se fusionen */
+  width: 100%; /* Ajusta el ancho de la tabla si es necesario */
+}
+
+.table th, .table td {
+  padding: 4px; /* Reduce el espaciado dentro de las celdas */
+  font-size: 15px; /* Ajusta el tamaño de la fuente */
+}
+
+.table th {
+  background-color: white; /* Color de fondo para los encabezados */
+}
+
+a.edit {
+  color: #000000; /* Color del enlace */
+  text-decoration: none; /* Quitar subrayado */
+  transition: color 0.3s; /* Transición suave en hover */
+}
+
+.table tr {
+  height: 50px; /* Ajusta la altura de las filas */
+}
+
+.piePagina {
+  margin-top: 10px;
+  font-size: 10px;
+}
+
+.file-name {
+  margin-bottom: 20px;
+}
+
+.modal-header {
+  background: #eaeef3;
+  color: rgb(0, 0, 0);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+button.btn-dark[disabled] {
+  cursor: not-allowed !important;
+}
+
+.file-name input {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+}
