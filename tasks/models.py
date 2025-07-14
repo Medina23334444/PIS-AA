@@ -1,8 +1,10 @@
+import uuid
 from datetime import date
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.forms import ValidationError
+from django.db import models
+from django.utils import timezone
 
 
 class Usuario(AbstractUser):
@@ -12,7 +14,7 @@ class Usuario(AbstractUser):
     direccion = models.CharField(max_length=100)
     telefono = models.CharField(max_length=10, unique=True)
 
-    def str(self):
+    def __str__(self):
         return f"{self.nombres} {self.apellidos}"
 
 
@@ -21,7 +23,7 @@ class Rol(models.Model):
     estado = models.BooleanField(default=True)
     user = models.ManyToManyField(Usuario, related_name='usuarios', through='RolPersona')
 
-    def str(self):
+    def __str__(self):
         return self.nombre
 
 
@@ -39,7 +41,7 @@ class PeriodoAcademico(models.Model):
     fechaFin = models.DateField(null=False)
     nombre = models.CharField(max_length=20, null=False)
 
-    def _str_(self):
+    def __str__(self):
         return self.nombre
 
     def fijarNombre(fecha1, fecha2):
@@ -119,3 +121,54 @@ class Perfil(models.Model):
     usuarioFacebook = models.CharField(max_length=30, blank=True, default='')
     usuarioTwitter = models.CharField(max_length=30, blank=True, default='')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+
+class Automata(models.Model):
+    nombre = models.CharField(max_length=50)
+    estados = models.JSONField()
+    alfabeto = models.JSONField()
+    inicial = models.CharField(max_length=20)
+    finales = models.JSONField()
+
+    def __str__(self):
+        return self.nombre
+
+
+class Transition(models.Model):
+    automaton = models.ForeignKey(
+        Automata,
+        related_name='transitions',
+        on_delete=models.CASCADE
+    )
+    estado = models.CharField(max_length=20)
+    evento = models.CharField(max_length=50)
+    destino = models.CharField(max_length=20)
+    prob = models.FloatField()
+
+    class Meta:
+        unique_together = ('automaton', 'estado', 'evento', 'destino')
+
+    def __str__(self):
+        return f"{self.estado} + {self.evento} → {self.destino} ({self.prob})"
+
+
+class Evento(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sesion_id = models.CharField("ID de sesión", max_length=128)
+    tipo_evento = models.CharField("Tipo de evento", max_length=50)
+    fecha_hora = models.DateTimeField("Fecha y hora", default=timezone.now)
+    datos = models.JSONField("Datos adicionales", null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.sesion_id} – {self.tipo_evento} @ {self.fecha_hora}"
+
+
+class Alerta(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sesion_id = models.CharField("ID de sesión", max_length=128)
+    evento = models.ForeignKey(Evento, on_delete=models.CASCADE, verbose_name="Evento relacionado")
+    fecha_generada = models.DateTimeField("Fecha de generación", default=timezone.now)
+    probabilidades = models.JSONField("Distribución de probabilidades")  # ej. {"S6": 0.6, ...}
+
+    def __str__(self):
+        return f"Alerta [{self.sesion_id}] @ {self.fecha_generada}"
