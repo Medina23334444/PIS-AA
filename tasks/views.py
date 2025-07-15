@@ -12,7 +12,7 @@ from django.http.response import JsonResponse
 import json
 from django.views.decorators.http import require_http_methods
 import logging
-
+from tasks.decorators import log_event
 
 logger = logging.getLogger(__name__)
 
@@ -1103,35 +1103,3 @@ def editarPerfilPersonal(request):
     else:
         form = PerfilForm(request.POST, instance=perfil)
     return render(request, 'perfilPersonal.html', {'usuario': usuario, 'perfil': perfil})
-
-
-quintupla= {
-    'states': {
-        'S0', 'S1', 'S2', 'S3', 'S4', 'S5',
-        'S6', 'S7', 'S8', 'S9', 'S10', 'S11'
-    },
-    'start': 'S0',
-    'finals': {'S6', 'S7', 'S8', 'S9', 'S10'},
-    'transitions': {
-        ('S0', 'login'): [('S1', 0.95)],
-        ('S0', 'failed_login'): [('S5', 0.85)],
-        ('S5', 'failed_login'): [('S5', 0.65)],
-        ('S1', 'read_file'): [('S2', 0.80)],
-        ('S1', 'write_file'): [('S3', 0.70)],
-        ('S1', 'upload_script'): [('S4', 0.30)],
-        ('S2', 'upload_script'): [('S4', 0.30)],
-        ('S3', 'upload_script'): [('S4', 0.30)],
-        ('S1', 'execute_binary'): [('S6', 0.20)],
-        ('S4', 'execute_binary'): [('S6', 0.20)],
-        ('S1', 'access_admin'): [('S7', 0.15)],
-        ('S5', 'access_admin'): [('S7', 0.10)],
-        ('S6', 'access_admin'): [('S7', 0.15)],
-        ('S7', 'create_user'): [('S8', 0.10)],
-        ('S8', 'change_config'): [('S9', 0.05)],
-        ('S9', 'open_port'): [('S10', 0.03)],
-        ('S1', 'download_data'): [('S11', 0.40)],
-        ('S1', 'logout'): [('S0', 0.90)],
-    }
-}
-
-
