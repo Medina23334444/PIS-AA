@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.views.csrf import csrf_failure
 
 from .csrf_detector import evaluar_evento
 from .models import Usuario, Perfil, Evento

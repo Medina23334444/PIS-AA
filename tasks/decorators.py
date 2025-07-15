@@ -4,18 +4,20 @@ from .models import Evento
 
 
 def log_event(tipo):
-    def decorator(view_func):
-        @wraps(view_func)
-        def _wrapped(request, *args, **kwargs):
-            if request.method in ("POST", "PUT", "DELETE"):
+    def deco(fn):
+        @wraps(fn)
+        def wrapped(request, *args, **kwargs):
+            if request.method in ("POST", "PUT", "DELETE") or tipo == "request_end":
                 Evento.objects.create(
-                    sesion_id=request.session.session_key or str(uuid.uuid4()),
+                    sesion_id=request.session.session_key,
                     tipo_evento=tipo,
-                    datos={"path": request.path, "method": request.method}
+                    datos={
+                        "path": request.path,
+                        "username": request.user.username if request.user.is_authenticated else None
+                    }
                 )
-            return view_func(request, *args, **kwargs)
+            return fn(request, *args, **kwargs)
 
-        return _wrapped
+        return wrapped
 
-    return decorator
-
+    return deco

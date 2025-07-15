@@ -168,7 +168,14 @@ class Alerta(models.Model):
     sesion_id = models.CharField("ID de sesión", max_length=128)
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE, verbose_name="Evento relacionado")
     fecha_generada = models.DateTimeField("Fecha de generación", default=timezone.now)
-    probabilidades = models.JSONField("Distribución de probabilidades")  # ej. {"S6": 0.6, ...}
+    probabilidades = models.JSONField("Distribución de probabilidades")
 
     def __str__(self):
         return f"Alerta [{self.sesion_id}] @ {self.fecha_generada}"
+
+
+class SessionState(models.Model):
+    sesion_id = models.CharField(max_length=128, unique=True)
+    distribution = models.JSONField(default=list)
+    updated = models.DateTimeField(auto_now=True)
+    alerted = models.BooleanField(default=False)

@@ -1,0 +1,83 @@
+{% extends "base_init.html" %}
+{% block title %}Alertas CSRF Detectadas{% endblock %}
+
+{% block content %}
+    <h1>Alertas CSRF Detectadas</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Sesión</th>
+            <th>Evento</th>
+            <th>Probabilidades</th>
+            <th>Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for alerta in alertas %}
+            <tr>
+                <td>{{ alerta.fecha_generada|date:"d \\de F \\de Y H:i" }}</td>
+                <td>
+                    {% with datos=alerta.evento.datos %}
+                        {{ datos.username|default:"—" }}
+                    {% endwith %}
+                </td>
+                <td>{{ alerta.sesion_id }}</td>
+                <td>{{ alerta.evento.tipo_evento }}</td>
+                <td>
+                    {% for estado, prob in alerta.probabilidades.items %}
+                        {{ estado }}: {{ prob|floatformat:2 }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal-{{ alerta.sesion_id }}">
+                        Ver eventos
+                    </button>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">No hay alertas.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {# Ahora metemos todos los modales, uno por cada sesión con alertas #}
+    {% for sid, eventos in eventos_por_sid.items %}
+        <div class="modal fade" id="modal-{{ sid }}" tabindex="-1" aria-labelledby="label-{{ sid }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="label-{{ sid }}">Eventos de la sesión <code>{{ sid }}</code></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th>Fecha y hora</th>
+                                <th>Tipo de evento</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for e in eventos %}
+                                <tr>
+                                    <td>{{ e.fecha_hora|date:"Y-m-d H:i:s" }}</td>
+                                    <td>{{ e.tipo_evento }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

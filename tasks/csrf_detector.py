@@ -1,7 +1,10 @@
 # tasks/csrf_detector.py
 
 import numpy as np
-from .models import Automata, Transition, Alerta
+from .models import Automata, Transition, Alerta, SessionState, Evento
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ProbabilisticAutomaton:
@@ -29,9 +32,28 @@ class ProbabilisticAutomaton:
         return new
 
 
+THRESHOLD = 0.8
+
+
 def evaluar_evento(evento):
+    if evento.tipo_evento == "request_end":
+        return
+
+    state, _ = SessionState.objects.get_or_create(
+        sesion_id=evento.sesion_id,
+        defaults={'distribution': [1.0] + [0.0] * (len(ProbabilisticAutomaton().states) - 1)}
+    )
     automaton = ProbabilisticAutomaton()
-    dist = automaton.step(evento.tipo_evento)
+    automaton.dist = np.array(state.distribution)
+
+    if evento.tipo_evento == "login":
+        dist = np.array([1.0] + [0.0] * (len(automaton.states) - 1))
+    else:
+        dist = automaton.step(evento.tipo_evento)
+
+    state.distribution = dist.tolist()
+    state.save()
+
     prob_ataque = sum(dist[i] for i in automaton.final_idxs)
     if prob_ataque >= 0.8:
         Alerta.objects.create(

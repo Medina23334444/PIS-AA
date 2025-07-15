@@ -1,11 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.db import IntegrityError, transaction
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from .forms import UsuarioForm, PerfilForm
-from .models import Usuario, Rol, RolPersona, Sugerencia, PeriodoAcademico, Ciclo, Perfil, EstadisticaPeriodo, Automata
+from .models import Usuario, Rol, RolPersona, Sugerencia, PeriodoAcademico, Ciclo, Perfil, EstadisticaPeriodo, Automata, \
+    Evento, Alerta
 from django.contrib import messages
 import tasks.RungeKutta as r
 from django.http.response import JsonResponse
@@ -28,7 +31,7 @@ def rol_requerido(*roles):
                 else:
                     return redirect('home')
             else:
-                return redirect('iniciarSesion')
+                return redirect('iniciar_sesion')
 
         return _wrapped_view
 
@@ -50,7 +53,7 @@ def iniciarSesion(request):
         elif any(rol.nombre == 'Administrador' for rol in roles):
             return redirect('homeAdministrador')
         else:
-            return redirect('')
+            return redirect('iniciar_sesion')
 
     if request.method == "POST":
         correo = request.POST.get('username')
@@ -62,14 +65,23 @@ def iniciarSesion(request):
 
             roles_persona = RolPersona.objects.filter(usuario=user)
             roles = [rp.rol for rp in roles_persona]
-
+            Evento.objects.create(
+                sesion_id=request.session.session_key,
+                tipo_evento="login",
+                datos={"username": correo}
+            )
             if any(rol.nombre == 'Personal' for rol in roles):
                 return redirect('homePersonal')
             elif any(rol.nombre == 'Administrador' for rol in roles):
                 return redirect('homeAdministrador')
             else:
-                return redirect('')
+                return redirect('iniciarSesion')
         else:
+            Evento.objects.create(
+                sesion_id=request.session.session_key,
+                tipo_evento="failed_login",
+                datos={"username": correo}
+            )
             if Usuario.objects.filter(username=correo).exists():
                 error = 'Contraseña incorrecta'
             else:
@@ -81,12 +93,14 @@ def iniciarSesion(request):
     return render(request, 'iniciarSesion.html')
 
 
+@log_event("logout")
 @login_required
 def cerrarSesion(request):
     logout(request)
     return redirect('home')
 
 
+@log_event("submit_request")
 @rol_requerido('Administrador')
 @login_required
 def registrarUsuario(request):
@@ -178,6 +192,7 @@ def validar_cedula(cedula):
     return digito_verificador == digitos_cedula[9]
 
 
+@log_event("submit_request")
 @rol_requerido('Administrador')
 @login_required
 def editarPersonalAdmi(request, id):
@@ -198,6 +213,7 @@ def editarPersonalAdmi(request, id):
                   {'form': form, 'personalAdministrativo': Usuario.objects.all()})
 
 
+@log_event("delete_user")
 @rol_requerido('Administrador')
 @login_required
 def eliminarUsuario(request, id):
@@ -843,19 +859,17 @@ def mostrarDatosHAuditoria(request):
     perfil = get_object_or_404(Perfil, usuario=usuario)
     periodos = PeriodoAcademico.objects.all()
 
-    # Arreglo para almacenar los periodos con sus estadísticas
     datos = []
-
     for periodo in periodos:
         estadisticas_ciclo = EstadisticaPeriodo.objects.filter(
-            idCiclo__idPeriodo=periodo)  # Estadísticas asociadas con ciclos específicos
+            idCiclo__idPeriodo=periodo
+        )
+        estadistica_general = EstadisticaPeriodo.objects.filter(
+            idPeriodo=periodo, idCiclo=None
+        ).first()
 
-        # Estadística total del periodo, sin asociación con ciclos
-        estadistica_general = EstadisticaPeriodo.objects.filter(idPeriodo=periodo, idCiclo=None).first()
-
-        administrador = None
         if estadistica_general:
-            administrador = estadistica_general.idAdministrador.str()
+            administrador = str(estadistica_general.idAdministrador)
         else:
             administrador = 'Ninguno'
 
@@ -866,13 +880,11 @@ def mostrarDatosHAuditoria(request):
             'administrador': administrador
         })
 
-    context = {
+    return render(request, "auditoríaDatosHReporte.html", {
         'datos': datos,
         'usuario': usuario,
         'perfil': perfil,
-    }
-
-    return render(request, "auditoríaDatosHReporte.html", context)
+    })
 
 
 @login_required
@@ -1103,3 +1115,71 @@ def editarPerfilPersonal(request):
     else:
         form = PerfilForm(request.POST, instance=perfil)
     return render(request, 'perfilPersonal.html', {'usuario': usuario, 'perfil': perfil})
+
+
+def csrf_failure(request, reason=""):
+    """
+    Esta vista se invoca cuando falla la validación CSRF.
+    """
+    tipo = "missing_token" if "CSRF" in reason and "present" not in reason else "invalid_token"
+    Evento.objects.create(
+        sesion_id=request.session.session_key or "",
+        tipo_evento=tipo,
+        datos={
+            "path": request.path,
+            "reason": reason,
+            "username": request.user.username if request.user.is_authenticated else None
+        },
+        fecha_hora=timezone.now()
+    )
+    return render(request, "403csrf.html", status=403)
+
+
+@rol_requerido('Administrador', 'Personal')
+@log_event("sensitive_action")
+@login_required
+def change_password(request):
+    if RolPersona.objects.filter(usuario=request.user, rol__nombre='Administrador').exists():
+        template_name = 'cambioClaveAdmin.html'
+        redirect_to = 'perfilAdministrador'
+    else:
+        template_name = 'cambioClave.html'
+        redirect_to = 'perfilPersonal'
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, '¡Tu contraseña se ha cambiado correctamente!')
+            return redirect(redirect_to)
+        else:
+            messages.error(request, 'Por favor corrige los errores en el formulario.')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, template_name, {'form': form})
+
+
+@login_required
+@rol_requerido('Administrador')
+@rol_requerido('Administrador')
+def list_alertas(request):
+    # 1) traer las alertas
+    alertas = Alerta.objects.select_related('evento').order_by('-fecha_generada')[:200]
+
+    # 2) agrupar *todos* los eventos de cada sesión que tenga alerta
+    eventos_por_sid = {}
+    for alerta in alertas:
+        sid = alerta.sesion_id
+        if sid not in eventos_por_sid:
+            eventos_por_sid[sid] = list(
+                Evento.objects
+                .filter(sesion_id=sid)
+                .order_by('fecha_hora')
+            )
+
+    return render(request, "list_alertas.html", {
+        "alertas": alertas,
+        "eventos_por_sid": eventos_por_sid,
+    })

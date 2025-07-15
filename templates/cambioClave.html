@@ -1,0 +1,101 @@
+{% extends "base_initPersonal.html" %}
+{% block title %}Cambiar Contraseña{% endblock %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'styleSugerencia.css' %}"/>
+    <script src="{% static 'tablas.js' %}"></script>
+
+    <div class="container">
+        <header class="mt-4 mb-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'homePersonal' %}">Inicio</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cambiar Contraseña</li>
+                </ol>
+            </nav>
+            <h1>Cambiar Contraseña</h1>
+        </header>
+
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+
+                            <!-- Contraseña actual -->
+                            <div class="mb-3">
+                                <label for="id_old_password" class="form-label">Contraseña Actual</label>
+                                <input
+                                        type="password"
+                                        name="old_password"
+                                        id="id_old_password"
+                                        class="form-control"
+                                        autocomplete="current-password"
+                                        required
+                                >
+                                {% if form.old_password.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.old_password.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Nueva contraseña -->
+                            <div class="mb-3">
+                                <label for="id_new_password1" class="form-label">Nueva Contraseña</label>
+                                <input
+                                        type="password"
+                                        name="new_password1"
+                                        id="id_new_password1"
+                                        class="form-control"
+                                        autocomplete="new-password"
+                                        required
+                                >
+                                {% if form.new_password1.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.new_password1.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Confirmar nueva contraseña -->
+                            <div class="mb-3">
+                                <label for="id_new_password2" class="form-label">Confirmar Nueva Contraseña</label>
+                                <input
+                                        type="password"
+                                        name="new_password2"
+                                        id="id_new_password2"
+                                        class="form-control"
+                                        autocomplete="new-password"
+                                        required
+                                >
+                                {% if form.new_password2.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.new_password2.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-dark">Actualizar Contraseña</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

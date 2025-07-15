@@ -39,4 +39,6 @@ urlpatterns = [
                   path('editarPerfilAdmi/', views.editarPerfilAdmi, name='editarPerfilAdmi'),
                   path('editarPerfilPersonal/', views.editarPerfilPersonal, name='editarPerfilPersonal'),
                   path('mostrarDatosHAuditoria/', views.mostrarDatosHAuditoria, name='mostrarDatosHAuditoria'),
+                  path('change-password/', views.change_password, name='change_password'),
+                  path("alertas/", views.list_alertas, name="list_alertas"),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
